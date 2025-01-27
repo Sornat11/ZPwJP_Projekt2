@@ -1,40 +1,109 @@
 # src/data_visualizations.py
-
+import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
+import plotly.express as px
 from src import DataAnalyzer
 
 class DataVisualization:
 
-    @staticmethod
-    def plot_average_revenue_by_industry(average_revenue):
+    
+    def plot_interactive_industry_revenue(self, industry_data: dict):
         """
-        Rysuje wykres słupkowy przedstawiający średni przychód w każdej branży.
+        Generuje ciemny wykres z różnymi kolorami dla każdej branży
+        """
+        # Konwersja na DataFrame i sortowanie
+        df = pd.DataFrame({
+            'Industry': list(industry_data.keys()),
+            'Average Revenue': list(industry_data.values())
+        }).sort_values('Average Revenue', ascending=True)
 
-        :param average_revenue: Słownik z branżą jako kluczem i średnim przychodem jako wartością.
-        """
-        labels, values = zip(*average_revenue.items())
+        # Styl wykresu
+        plt.style.use('dark_background')
+        fig, ax = plt.subplots(figsize=(12, 8), facecolor='#0e1117')
+        ax.set_facecolor('#0e1117')
+
+        # Generowanie różnych kolorów
+        colors = plt.cm.tab10(np.linspace(0, 1, len(df)))
+
+        # Tworzenie wykresu
+        bars = ax.barh(df['Industry'], 
+                      df['Average Revenue'], 
+                      color=colors,
+                      height=0.7,
+                      edgecolor='white')
+
+        # Formatowanie osi i tytułu
+        ax.set_title('Średni przychód w wybranych branżach', 
+                   color='white', 
+                   fontsize=16,
+                   pad=20)
         
-        plt.figure(figsize=(10, 6))
-        plt.bar(labels, values, color='lightgreen')
-        plt.xlabel('Branża')
-        plt.ylabel('Średni przychód (mln USD)')
-        plt.title('Średni przychód w każdej branży')
-        plt.xticks(rotation=45, ha='right')
-        plt.tight_layout()
-        plt.show()
+        ax.set_xlabel('Średni przychód (miliony USD)', 
+                    color='white',
+                    fontsize=12)
+        
+        ax.tick_params(axis='both', 
+                     colors='white',
+                     labelsize=10)
 
-    @staticmethod
+        # Siatka i obramowanie
+        ax.grid(color='gray', 
+              linestyle='--', 
+              linewidth=0.5,
+              alpha=0.7)
+        
+        ax.spines['bottom'].set_color('white')
+        ax.spines['left'].set_color('white')
+
+        # Etykiety wartości
+        for i, (industry_data, revenue) in enumerate(zip(df['Industry'], df['Average Revenue'])):
+            ax.text(revenue + 0.02 * max(df['Average Revenue']),  # Pozycja X
+                  i,  # Pozycja Y
+                  f'${revenue:,.2f}M', 
+                  color='white',
+                  va='center',
+                  fontsize=10,
+                  fontweight='bold')
+
+        plt.tight_layout()
+        return fig
+
+
     def plot_revenue_vs_employees(df):
-        """
-        Rysuje wykres punktowy przedstawiający zależność między przychodem a liczbą pracowników.
+        # Konwersja danych na numeryczne (jeśli potrzebne)
+        df = df.copy()
+        df['Employees'] = df['Employees'].str.replace(',', '').astype(int)
+        df['Revenue (USD millions)'] = (
+            df['Revenue (USD millions)']
+            .str.replace(',', '')
+            .astype(float)
+        )
 
-        :param df: DataFrame zawierający kolumny 'Revenue (USD millions)' i 'Employees'.
-        """
-        plt.figure(figsize=(10, 6))
-        plt.scatter(df['Employees'], df['Revenue (USD millions)'], color='purple', alpha=0.6)
-        plt.xlabel('Liczba pracowników')
-        plt.ylabel('Przychód (mln USD)')
-        plt.title('Zależność między przychodem a liczbą pracowników')
-        plt.grid(True)
-        plt.tight_layout()
-        plt.show()
+        # Tworzenie wykresu
+        fig = px.scatter(
+            df,
+            x='Employees',
+            y='Revenue (USD millions)',
+            hover_name='Name',  # Wyświetla nazwę firmy przy hoverze
+            color='Industry',   # Kolorowanie punktów według branży
+            size='Revenue (USD millions)',  # Rozmiar punktu zależny od przychodu
+            labels={
+                'Employees': 'Liczba pracowników',
+                'Revenue (USD millions)': 'Przychód (mln USD)'
+            },
+            title='<b>Zależność między przychodem a liczbą pracowników</b>',
+            template='plotly_dark'  # Ciemny motyw
+        )
+
+        # Dostosowanie stylu
+        fig.update_layout(
+            hoverlabel=dict(
+                bgcolor="black",
+                font_size=14
+            ),
+            xaxis=dict(showgrid=True, gridcolor='gray'),
+            yaxis=dict(showgrid=True, gridcolor='gray'),
+            font=dict(color='white')
+        )
+        return fig
