@@ -1,5 +1,7 @@
 from src import DataScraper
 from src import DataAnalyzer
+from src import DataVisualization
+
 class Main:
     def __init__(self, url):
         self.url = url
@@ -26,6 +28,9 @@ class Main:
         
         # Analiza danych
         self.analyze_data()
+        
+        # Rysowanie wykresów
+        self.plot_data()
 
     def show_data(self):
         print("Dane zostały pobrane i przetworzone:")
@@ -55,10 +60,23 @@ class Main:
         companies_in_state = self.analyzer.find_companies_by_headquarters_state(state)
         print(f"\nFirmy z siedzibą w stanie {state}:")
         print(companies_in_state)
+        
+    def plot_data(self):
+        print("\nRysowanie wykresów...")
+        
+        # Tworzenie instancji DataVisualization
+        visualisation = DataVisualization()
+        
+        # Wykres średniego przychodu w każdej branży
+        average_revenue = self.analyzer.calculate_average_revenue_by_industry()
+        visualisation.plot_average_revenue_by_industry(average_revenue)
+        
+        # Wykres zależności między przychodem a liczbą pracowników
+        visualisation.plot_revenue_vs_employees(self.analyzer.df)
+
 
 if __name__ == "__main__":
     url = 'https://en.wikipedia.org/wiki/List_of_largest_companies_in_the_United_States_by_revenue'
     
     main_app = Main(url)
     main_app.run()
-    
