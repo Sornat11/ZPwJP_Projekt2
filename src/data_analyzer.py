@@ -11,7 +11,7 @@ class DataAnalyzer:
         """
         self.df = df
 
-    @staticmethod
+
     def sort_results(self, data, reverse=True):
         """
         Sortuje wyniki według wartości.
