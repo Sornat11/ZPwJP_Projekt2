@@ -1,2 +1,3 @@
+# Ignorowanie folderów __pycache__ we wszystkich lokalizacjach
+**/__pycache__/
 main.py.orig
-__pycache__/
