@@ -70,3 +70,5 @@ class DataAnalyzer:
         :return: DataFrame z firmami z siedzibą w określonym stanie.
         """
         return self.df[self.df['Headquarters'].str.contains(state, case=False)]
+    
+    

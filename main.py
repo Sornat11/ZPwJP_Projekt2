@@ -82,7 +82,7 @@ def main():
         })
 
         # Sekcja interaktywnego wykresu
-        st.write("### Interaktywny wykres średniego przychodu")
+        st.write("### Wykres średniego przychodu")
         
         all_industries = average_revenue_df['Industry'].tolist()
         selected_industries = st.multiselect(
@@ -111,9 +111,10 @@ def main():
             st.warning("Wybierz przynajmniej jedną branżę z listy powyżej")
 
         # Wykres zależności między przychodem a liczbą pracowników
-        st.write("#### Interaktywna zależność między przychodem a liczbą pracowników:")
+        st.write("#### Zależność między przychodem a liczbą pracowników:")
         fig2 = visualization.plot_revenue_vs_employees(analyzer.df)
         st.plotly_chart(fig2, use_container_width=True)
+        
         
     except Exception as e:
         st.error(f"Błąd podczas analizy: {str(e)}")

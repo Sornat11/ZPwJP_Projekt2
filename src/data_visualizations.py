@@ -70,12 +70,23 @@ class DataVisualization:
         return fig
 
 
-    def plot_revenue_vs_employees(df):
-        # Konwersja danych na numeryczne (jeśli potrzebne)
+    def plot_revenue_vs_employees(self, df):  
+        """
+        Generuje interaktywny wykres punktowy zależności przychodu od liczby pracowników.
+        """
+        
         df = df.copy()
-        df['Employees'] = df['Employees'].str.replace(',', '').astype(int)
+        # Konwersja kolumn na string i czyszczenie
+        df['Employees'] = (
+            df['Employees']
+            .astype(str)  # Wymuszamy typ tekstowy
+            .str.replace(',', '')
+            .astype(int)
+        )
+        
         df['Revenue (USD millions)'] = (
             df['Revenue (USD millions)']
+            .astype(str)  # Wymuszamy typ tekstowy
             .str.replace(',', '')
             .astype(float)
         )
@@ -106,4 +117,7 @@ class DataVisualization:
             yaxis=dict(showgrid=True, gridcolor='gray'),
             font=dict(color='white')
         )
+        
         return fig
+        
+    
