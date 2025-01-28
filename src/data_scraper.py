@@ -12,7 +12,7 @@ class DataScraper:
     def fetch_data(self):
         page = requests.get(self.url)
         self.page = page
-        self.soup = BeautifulSoup(page.text, 'lxml')
+        self.soup = BeautifulSoup(page.text, 'html.parser')
 
     def parse_table(self):
         # Znalezienie pierwszej tabeli na stronie
