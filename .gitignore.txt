@@ -1,2 +1,8 @@
-main.py.orig
+# Ignorowanie plików logów
+*.log
+
+# Ignorowanie plików tymczasowych
+*.tmp
+
+# Ignorowanie katalogu pycache
 __pycache__/

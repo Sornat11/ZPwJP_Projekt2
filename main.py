@@ -2,84 +2,102 @@ import streamlit as st
 from src import DataScraper, DataAnalyzer, DataVisualization
 import pandas as pd
 
+# Konfiguracja strony
+st.set_page_config(
+    page_title="Największe spółki w USA - analiza",
+    page_icon="💼",  # Ikona strony
+    layout="wide"  # Szeroki layout
+)
+
 # Funkcja główna aplikacji
 def main():
-    st.title("Analiza i Wizualizacja Firm")
+    st.title("Największe spółki w USA - analiza")
+    
+    # Wstęp
+    st.write("""
+        ## Projekt zaliczeniowy - Zaawansowane programowanie w języku Python
+        **Rok akademicki 2024/2025**
+        
+        ### Autorzy:
+        - Jakub Sornat
+        - Marcin Mika
+        - Filip Kopańko
+        - Maciej Tajs
+    """)
 
-    # Schemat projektu
-    st.write("## Projekt zaliczeniowy")
-    st.write("### Zaawansowane programowanie w języku Python")
-    st.write("Rok akademicki 2024/2025")
-    st.write("#### Autorzy:")
-    st.write("- Jakub Sornat")
-    st.write("- Marcin Mika")
-    st.write("- Filip Kopańko")
-    st.write("- Maciej Tajs")
-
-
-    st.write("### Podział ról:")
-    st.write("- **Jakub Sornat**: Web Scraping")
-    st.write("- **Marcin Mika**: Analiza i testy do analizy")
-    st.write("- **Filip Kopańko**: Streamlit i wykresy")
-    st.write("- **Maciej Tajs**: Testy i wykresy")
-
+    st.write("""
+        ### Podział ról:
+        - **Jakub Sornat**: Web Scraping
+        - **Marcin Mika**: Analiza i testy do analizy
+        - **Filip Kopańko**: Streamlit i wykresy
+        - **Maciej Tajs**: Testy i wykresy
+    """)
+    
+    # Sekcja Analiza danych
+    st.subheader("Analiza danych")
+    
+    # Podstawowe informacje o URL
     url = st.text_input(
         "Podaj URL strony do pobrania danych:",
         value='https://en.wikipedia.org/wiki/List_of_largest_companies_in_the_United_States_by_revenue'
     )
 
-
-    st.write("Rozpoczynanie pobierania danych...")
-    
-    try:
-        scraper = DataScraper(url)
-        scraper.fetch_data()
-        scraper.parse_table()
-
-        # Wyświetlanie przetworzonych danych
-        data = scraper.get_data()
-        st.write("### Dane pobrane i przetworzone:")
-        st.dataframe(data)
-
-        # Analiza danych
-        st.write("### Analiza danych:")
-        analyzer = DataAnalyzer(data)
-
-        # Średni przychód wg branży
-        st.write("#### Średni przychód wg branży:")
-        average_revenue = analyzer.calculate_average_revenue_by_industry()
-        st.write(average_revenue)
-
-        # Firmy z największym wzrostem przychodu
-        st.write("#### Top 5 firm z największym wzrostem przychodu:")
-        top_growth = analyzer.find_top_growth_companies()
-        st.write(top_growth)
-
-        # Firmy z największą liczbą pracowników
-        st.write("#### Top 5 firm z największą liczbą pracowników:")
-        top_employees = analyzer.find_companies_with_most_employees()
-        st.write(top_employees)
-
-        # Firmy z siedzibą w określonym stanie
-        state = st.text_input("Podaj nazwę stanu do analizy (np. California):", value="California")
-        if state:
-            companies_in_state = analyzer.find_companies_by_headquarters_state(state)
-            st.write(f"#### Firmy z siedzibą w stanie {state}:")
-            st.write(companies_in_state)
-
-        # Wizualizacja danych
-        st.write("### Wizualizacja danych:")
-        visualization = DataVisualization()
-
-        # Wykres średniego przychodu wg branży
-        # Pobierz dane jako słownik
-        average_revenue_dict = analyzer.calculate_average_revenue_by_industry()
+    if url:
+        st.write("Rozpoczynanie pobierania danych...")
         
-        # Konwersja słownika na DataFrame dla widgetu multiselect
-        average_revenue_df = pd.DataFrame({
-            'Industry': list(average_revenue_dict.keys()),
-            'Average Revenue': list(average_revenue_dict.values())
-        })
+        try:
+            scraper = DataScraper(url)
+            scraper.fetch_data()
+            scraper.parse_table()
+
+            # Wyświetlanie przetworzonych danych
+            data = scraper.get_data()
+            st.write("### Dane pobrane i przetworzone:")
+            st.dataframe(data)
+
+            # Analiza danych
+            analyzer = DataAnalyzer(data)
+
+            # Średni przychód wg branży
+            st.write("#### Średni przychód wg branży:")
+            average_revenue = analyzer.calculate_average_revenue_by_industry()
+            st.write(average_revenue)
+
+            # Firmy z największym wzrostem przychodu
+            st.write("#### Top 5 firm z największym wzrostem przychodu:")
+            top_growth = analyzer.find_top_growth_companies()
+            st.write(top_growth)
+
+            # Firmy z największą liczbą pracowników
+            st.write("#### Top 5 firm z największą liczbą pracowników:")
+            top_employees = analyzer.find_companies_with_most_employees()
+            st.write(top_employees)
+
+            # Firmy z siedzibą w określonym stanie
+            state = st.text_input("Podaj nazwę stanu do analizy (np. California):", value="California")
+            if state:
+                companies_in_state = analyzer.find_companies_by_headquarters_state(state)
+                st.write(f"#### Firmy z siedzibą w stanie {state}:")
+                st.write(companies_in_state)
+
+        except Exception as e:
+            st.error(f"Błąd podczas analizy: {str(e)}")
+    
+    # Sekcja Wizualizacja danych
+    st.subheader("Wizualizacja danych")
+    
+    # Wizualizacja danych
+    st.write("### Wizualizacja danych:")
+    visualization = DataVisualization()
+
+    # Wykres średniego przychodu wg branży
+    # Zakładamy, że dane zostały już pobrane w poprzednich sekcjach
+    average_revenue_dict = analyzer.calculate_average_revenue_by_industry()
+    
+    average_revenue_df = pd.DataFrame({
+        'Industry': list(average_revenue_dict.keys()),
+        'Average Revenue': list(average_revenue_dict.values())
+    })
 
         # Sekcja interaktywnego wykresu
         st.write("### Wykres średniego przychodu")
