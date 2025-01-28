@@ -86,18 +86,14 @@ def main():
     # Sekcja Wizualizacja danych
     st.subheader("Wizualizacja danych")
     
-    # Wizualizacja danych
-    st.write("### Wizualizacja danych:")
-    visualization = DataVisualization()
-
-    # Wykres średniego przychodu wg branży
-    # Zakładamy, że dane zostały już pobrane w poprzednich sekcjach
-    average_revenue_dict = analyzer.calculate_average_revenue_by_industry()
-    
-    average_revenue_df = pd.DataFrame({
-        'Industry': list(average_revenue_dict.keys()),
-        'Average Revenue': list(average_revenue_dict.values())
-    })
+    try:
+        # Zakładamy, że dane zostały już pobrane w poprzednich sekcjach
+        average_revenue_dict = analyzer.calculate_average_revenue_by_industry()
+        
+        average_revenue_df = pd.DataFrame({
+            'Industry': list(average_revenue_dict.keys()),
+            'Average Revenue': list(average_revenue_dict.values())
+        })
 
         # Sekcja interaktywnego wykresu
         st.write("### Wykres średniego przychodu")
@@ -123,16 +119,24 @@ def main():
             
             # Opcjonalnie: tabela z danymi
             st.write("#### Dane dla wybranych branż:")
-            st.dataframe(pd.DataFrame.from_dict(filtered_dict, orient='index', 
-                       columns=['Średni przychód (M$']))
+            st.dataframe(
+                pd.DataFrame.from_dict(
+                    filtered_dict,
+                    orient='index',
+                    columns=['Średni przychód (M$)']
+                )
+            )
         else:
             st.warning("Wybierz przynajmniej jedną branżę z listy powyżej")
 
         # Wykres zależności między przychodem a liczbą pracowników
         st.write("#### Zależność między przychodem a liczbą pracowników:")
-        fig2 = visualization.plot_revenue_vs_employees(analyzer.df)
+        # Utwórz obiekt klasy DataVisualization
+        interactive_viz = DataVisualization()
+
+        # Wywołaj metodę jako instancja obiektu
+        fig2 = interactive_viz.plot_revenue_vs_employees(analyzer.df)
         st.plotly_chart(fig2, use_container_width=True)
-        
         
     except Exception as e:
         st.error(f"Błąd podczas analizy: {str(e)}")
