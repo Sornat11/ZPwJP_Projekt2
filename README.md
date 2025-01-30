@@ -1,36 +1,56 @@
-# Projekt Analizy i Wizualizacji Danych
+# Analiza i Wizualizacja Danych z Web Scrapingu
 
-Projekt ten oferuje funkcjonalność do pobierania, analizowania i wizualizowania danych dotyczących przychodów firm, wzrostu oraz statystyk zatrudnienia. Jest zaprojektowany do przetwarzania i analizy danych biznesowych za pomocą bibliotek Pythona do manipulacji danymi i wizualizacji.
+Projekt wykorzystuje programowanie obiektowe w Pythonie do pobierania, analizy i wizualizacji danych pozyskanych ze stron internetowych. Proces obejmuje web scraping, przetwarzanie danych oraz ich prezentację w formie interaktywnych wykresów. Dodatkowo, przeprowadzono testy w celu weryfikacji poprawności działania funkcji.
 
-## Funkcje
+## Główne Założenia
 
-1. **Pobieranie Danych**:
-    - Klasa `DataScraper` pobiera i analizuje dane z określonego URL.
-    - Wydobywa tabele z strony i przechowuje dane w DataFrame Pandas.
+1. **Pobieranie danych**:
+    - Automatyczne zbieranie informacji ze stron internetowych przy użyciu web scrapingu.
+    - Przetwarzanie i przechowywanie danych w formacie Pandas DataFrame.
 
-2. **Analiza Danych**:
-    - Klasa `DataAnalyzer` zawiera metody do:
-        - Obliczania średnich przychodów według branży.
-        - Znalezienia firm z największym wzrostem przychodów.
-        - Identyfikowania firm z największą liczbą pracowników.
-        - Filtrowania firm na podstawie stanu, w którym znajduje się ich siedziba.
+2. **Analiza danych**:
+    - Identyfikacja kluczowych trendów i zależności.
+    - Możliwość filtrowania i agregowania danych według różnych kryteriów.
 
-3. **Wizualizacja Danych**:
-    - Klasa `DataVisualization` oferuje metody do tworzenia interaktywnych i statycznych wykresów:
-        - Wykres słupkowy pokazujący średni przychód według branży.
-        - Wykres punktowy porównujący przychód z liczbą pracowników dla firm.
+3. **Wizualizacja danych**:
+    - Tworzenie wykresów i interaktywnych elementów graficznych.
+    - Prezentacja wyników w przejrzysty sposób przy użyciu narzędzi do wizualizacji.
 
-## Instalacja i Przygotowanie Środowiska
+4. **Testowanie**:
+    - Przeprowadzono testy poprawności pobierania i analizy danych.
+    - Weryfikacja zgodności wyników z oczekiwanymi wartościami.
 
-### Wymagania Wstępne
+## Instalacja i Konfiguracja
 
-Upewnij się, że masz zainstalowanego Pythona w wersji 3.x. Zaleca się również utworzenie środowiska wirtualnego do zarządzania zależnościami.
+### Wymagania
 
-### Kroki Instalacji
+- Python 3.x
+- Wirtualne środowisko do zarządzania zależnościami (zalecane)
 
-1. Sklonuj repozytorium lub pobierz pliki projektu.
-2. Zainstaluj wymagane biblioteki Pythona, uruchamiając poniższe polecenie:
+### Instalacja
+
+1. Pobierz projekt z repozytorium.
+2. Zainstaluj wymagane biblioteki, uruchamiając:
 
 ```bash
 pip install -r requirements.txt
 ```
+
+## Uruchomienie
+
+Po zainstalowaniu zależności uruchom aplikację, aby zobaczyć analizę i wizualizacje danych:
+
+```bash
+streamlit run main.py
+```
+
+## Technologie
+
+Projekt wykorzystuje:
+
+- **Python** – główny język programowania
+- **Pandas** – analiza danych
+- **BeautifulSoup/Selenium** – web scraping
+- **Matplotlib/Seaborn/Plotly** – wizualizacja danych
+- **Streamlit** – interaktywny interfejs użytkownika
+- **Pytest/Unittest** – testowanie poprawności kodu
